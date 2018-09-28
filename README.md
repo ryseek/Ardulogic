@@ -1,6 +1,6 @@
 # Ardulogic
 
-The project's base was created by the [gt-volk] (https://www.drive2.ru/users/gt-volk/).
+The project's base was created by the [gt-volk](https://www.drive2.ru/users/gt-volk/).
 
 # My plans:
 - [x] Create repository
