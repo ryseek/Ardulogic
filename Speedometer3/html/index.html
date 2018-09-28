@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ARDULOGIC</title>
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+<div class="toolbar fix_top">
+    <div class="toolbar_name">
+        <a href="/">ARDULOGIC</a>
+    </div>
+    <div class="toolbar_settings" id="settings">
+        ≡
+    </div>
+</div>
+<div id="menu" style="display: none" class="fix_top">
+    menu
+</div>
+<div id="content">
+    <!--<div id="button">Загрузить результаты</div>-->
+    <div id="results">
+        <p>Замеров пока нет</p>
+    </div>
+</div>
+<div id="button">↺</div>
+</body>
+<script>
+    var button = document.getElementById('button');
+    var settings = document.getElementById('settings');
+    var menu = document.getElementById('menu');
+    var results = document.getElementById('results');
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        results.innerHTML = '<p>Загрузка замеров...</p>';
+        if (request.readyState === 4) {
+            if (request.status === 200) {
+                var data = JSON.parse(request.responseText);
+                if (data.length !== 0) {
+                    results.innerHTML = '';
+                    for (var i = 0; i < data.length; i++) {
+                        var html = '<div id="' + i + '" class="row row_res">';
+                        html += '<div>' + data[i]['a100'] + '</div>';
+                        html += '<div>' + data[i]['a60'] + '</div>';
+                        html += '<div>' + data[i]['a30'] + '</div>';
+                        html += '</div>';
+                        results.innerHTML = results.innerHTML + html;
+                    }
+                } else {
+                    results.innerHTML = '<p>Замеров пока нет</p>';
+                }
+            } else {
+                results.innerHTML = '<p>Произошла ошибка при запросе: ' + request.status + ' ' + request.statusText + '</p>';
+            }
+        }
+    };
+
+    button.addEventListener('click', function () {
+        request.open('get', 'results');
+        request.send();
+    });
+    settings.addEventListener('click', function () {
+        if (menu.style.display !== "block") {
+            menu.style.display = "block";
+        } else menu.style.display = "none";
+    });
+    window.onload = function () {
+        request.open('get', 'results');
+        request.send();
+    };
+</script>
+</html>
